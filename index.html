@@ -722,34 +722,44 @@
 <!-- 08 -->
 <section id="microsoft">
   <div class="section-label"><span class="num">08</span>Wat Microsoft zelf doet</div>
-  <h2>Microsoft bouwt zelf op GitHub. En zet daar zijn AI-toekomst op.</h2>
-  <p>Microsoft bezit zowel Azure DevOps als GitHub. Twee duidelijke signalen: waar bouwt Microsoft zelf op, en waar gaat de AI-investering heen?</p>
+  <h2>Dit is wat Microsoft zelf schrijft. Niet wat GitHub erover zegt.</h2>
+  <p>Microsoft bezit zowel Azure DevOps als GitHub. Voor de richting van het platform hoef je niemand van GitHub te geloven — Microsoft is er zelf opvallend expliciet over. Hieronder de publieke bronnen, met directe quotes.</p>
 
-  <h3 style="margin-top: 28px;">1. Microsoft's eigen engineering staat op GitHub</h3>
+  <h3 style="margin-top: 28px;">1. ADO staat officieel op "security en onderhoud"</h3>
   <ul>
-    <li><a href="https://github.com/microsoft">github.com/microsoft</a> — duizenden Microsoft repos, inclusief <a href="https://github.com/microsoft/vscode">VS Code</a>, <a href="https://github.com/microsoft/TypeScript">TypeScript</a>, <a href="https://github.com/microsoft/PowerToys">PowerToys</a>, <a href="https://github.com/microsoft/WSL">WSL</a>, <a href="https://github.com/microsoft/playwright">Playwright</a>.</li>
-    <li><a href="https://github.com/dotnet">github.com/dotnet</a> — het volledige .NET platform: runtime, ASP.NET, EF Core, MAUI. Niet op ADO.</li>
-    <li><a href="https://github.com/Azure">github.com/Azure</a> — Azure SDK's, Bicep, Terraform providers, ARM templates. De cloud waar je producten op draaien wordt ontwikkeld op GitHub.</li>
-    <li><a href="https://github.com/openai">OpenAI</a> — Microsoft's grootste AI-partner zit op GitHub, niet op ADO.</li>
+    <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/features-timeline">Azure DevOps features timeline</a> bevat geen nieuwe feature-investeringen meer — de roadmap focust op security, compliance en stabiliteit.</li>
+    <li>In de <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/2025/sprint-254-update">Sprint 254 release notes</a> kondigt Microsoft de uitfasering van het Azure DevOps OAuth-platform aan, woordelijk: <em>"a first step towards retiring the Azure DevOps OAuth platform"</em>. Klanten worden doorverwezen naar Microsoft Entra ID — dezelfde identity layer als GitHub Enterprise.</li>
   </ul>
 
-  <h3 style="margin-top: 28px;">2. De AI-roadmap loopt via GitHub</h3>
+  <h3 style="margin-top: 28px;">2. Microsoft zegt zelf: migreer nu naar GitHub</h3>
   <ul>
-    <li>De <a href="https://github.blog/changelog/">GitHub changelog</a> publiceert wekelijks nieuwe AI-features: <a href="https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent">coding agent</a>, <a href="https://docs.github.com/en/copilot/concepts/agents/anthropic-claude">Claude integratie</a>, <a href="https://docs.github.com/en/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp">MCP support</a>, <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review">CCR</a>, <a href="https://docs.github.com/en/copilot/using-github-copilot/copilot-spaces/about-organizing-and-sharing-context-with-copilot-spaces">Spaces</a>, <a href="https://docs.github.com/en/copilot/customizing-copilot/about-customizing-github-copilot-chat-responses">custom instructions</a>.</li>
-    <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps release notes</a> tonen vooral kleine verbeteringen en bugfixes. Geen nieuwe agents, geen coding agents, geen AI code review.</li>
-    <li>De <a href="https://news.microsoft.com/source/2025/05/19/microsoft-build-2025/">Microsoft Build 2025 keynote</a> ging grotendeels over GitHub Copilot, niet over Azure DevOps. Coding agent, AI in security, agents in pull requests — allemaal op GitHub.</li>
-    <li>Satya Nadella positioneert GitHub publiekelijk als <em>"the home for all developers"</em> — niet ADO.</li>
+    <li>Het Azure DevOps team schrijft op de officiële DevOps blog: <em>"Now is the time to migrate your repos to GitHub"</em> — <a href="https://devblogs.microsoft.com/devops/azure-devops-with-github-repositories-your-path-to-agentic-ai/">Azure DevOps with GitHub repositories: your path to agentic AI</a>.</li>
+    <li>In de follow-up (nov 2025) positioneert Microsoft GitHub als <em>"the richest end-to-end agentic experience"</em> — <a href="https://devblogs.microsoft.com/devops/azure-devops-and-github-repositories-next-steps-in-the-path-to-agentic-ai/">Next steps in the path to agentic AI</a>.</li>
+    <li>Microsoft verhuist z'n eigen interne repos van ADO naar GitHub, en publiceert het draaiboek: <a href="https://devblogs.microsoft.com/devops/how-microsoft-is-migrating-repositories-to-github/">How Microsoft is migrating repositories to GitHub</a>.</li>
   </ul>
 
-  <h3 style="margin-top: 28px;">3. Microsoft bouwt zelf de migratiepaden</h3>
+  <h3 style="margin-top: 28px;">3. Nadella's CoreAI-memo zet de richting vast</h3>
   <ul>
-    <li><a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> — migratie van ADO repos naar GitHub, door Microsoft gebouwd en onderhouden.</li>
-    <li><a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">GitHub Actions Importer</a> — converteert Azure Pipelines YAML automatisch naar GitHub Actions.</li>
-    <li>Een vendor maakt geen first-party migratietools <em>van</em> zijn eigen product <em>naar</em> zijn andere product tenzij dat de strategische richting is.</li>
+    <li>In januari 2025 kondigt Satya Nadella de nieuwe <a href="https://blogs.microsoft.com/blog/2025/01/13/introducing-core-ai-platform-and-tools/">CoreAI – Platform and Tools</a> divisie aan. GitHub valt daar expliciet onder, samen met Dev Div en de AI Platform-teams. ADO wordt niet genoemd als groeigebied.</li>
+    <li>Dit is geen marketing — dit is een org-structuur. Waar het geld en de engineers heen gaan, gaat de roadmap heen.</li>
+  </ul>
+
+  <h3 style="margin-top: 28px;">4. Microsoft eigen engineering zit al op GitHub</h3>
+  <ul>
+    <li><a href="https://github.com/microsoft">github.com/microsoft</a> — VS Code, TypeScript, PowerToys, WSL, Playwright, .NET, Azure SDK's.</li>
+    <li><a href="https://github.com/dotnet">github.com/dotnet</a>, <a href="https://github.com/Azure">github.com/Azure</a>, <a href="https://github.com/openai">github.com/openai</a> — alles wat Microsoft als platform pusht, ontwikkelen ze in de open op GitHub. Niet op ADO.</li>
+  </ul>
+
+  <h3 style="margin-top: 28px;">5. De migratiepaden zijn first-party gebouwd</h3>
+  <ul>
+    <li><a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> — ADO repos → GitHub, door Microsoft onderhouden.</li>
+    <li><a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">GitHub Actions Importer</a> — Azure Pipelines YAML → GitHub Actions, automatisch.</li>
+    <li>Een vendor bouwt geen first-party tools <em>van</em> zijn ene product <em>naar</em> zijn andere tenzij dat de gewenste richting is.</li>
+    <li>GitHub publiceert er een hele resource-pagina overheen: <a href="https://github.com/resources/insights/accelerate-innovation-azure-devops-migration">Accelerate innovation with an Azure DevOps migration</a> — met als sluitende boodschap <em>"the answer is clear: now is the moment to migrate"</em>.</li>
   </ul>
 
   <div class="card accent" style="margin-top: 28px;">
-    <p>Dit is geen "ADO is dood" verhaal. ADO blijft draaien voor wie er op zit. Maar als Microsoft zelf op GitHub bouwt, GitHub als AI-platform positioneert, en de migratietools bouwt — dan loont het de moeite om je eigen strategie tegen die richting te leggen.</p>
+    <p>Dit is geen "ADO is dood" verhaal — ADO blijft draaien voor wie er op zit. Maar als Microsoft zelf schrijft <em>"now is the time to migrate your repos to GitHub"</em>, z'n eigen repos verhuist, en GitHub als <em>"richest end-to-end agentic experience"</em> positioneert, dan is dat een signaal dat je serieus tegen je eigen 3–5 jaars-strategie kan houden.</p>
   </div>
 </section>
 
