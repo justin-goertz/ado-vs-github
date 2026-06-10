@@ -495,13 +495,12 @@
   <div class="nav-pills">
     <a href="#aanleiding">Aanleiding</a>
     <a href="#legacy">Legacy / Windows</a>
+    <a href="#ccr">CCR business case</a>
     <a href="#rekensom">Het rekensommetje</a>
     <a href="#wat-je-mist">Wat je mist</a>
     <a href="#eu">EU compliance</a>
     <a href="#gap">Het gat dat niet dicht gaat</a>
     <a href="#microsoft">Wat Microsoft zelf doet</a>
-    <a href="#ea">MS EA voordeel</a>
-    <a href="#ccr">CCR business case</a>
     <a href="#acceleration">Momentum</a>
   </div>
 </div>
@@ -532,9 +531,43 @@
   </div>
 </section>
 
-<!-- 03 -->
+<!-- 03 - CCR (moved up) -->
+<section id="ccr">
+  <div class="section-label"><span class="num">03</span>De business case begint hier</div>
+  <h2>Eén feature dekt de hele licentie</h2>
+  <p>Je hoeft het hele platform niet eens te activeren om de business case rond te krijgen. Pak één capability: <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review"><strong>Copilot Code Review (CCR)</strong></a>.</p>
+  <p>CCR reviewt elke PR automatisch vóór een mens er naar kijkt. Style, bugs, security smells, performance — opgevangen voordat het in de review queue ligt.</p>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="num">30–50%</div>
+      <div class="label">minder review-tijd per PR (afhankelijk van team)</div>
+    </div>
+    <div class="stat">
+      <div class="num">↑ velocity</div>
+      <div class="label">meer PRs per week, dezelfde mensen</div>
+    </div>
+  </div>
+
+  <p>Reken een team van 20 engineers × gemiddeld 4u code review per week × NL senior rate. Op jaarbasis enkele tonnen aan review-tijd. CCR vangt een significant deel daarvan op.</p>
+
+  <div class="card accent">
+    <h3>Het volledige plaatje</h3>
+    <p>Alleen al de tijdwinst en de snellere merge cadence van CCR dekt in veel gevallen de complete GitHub Enterprise + Copilot licentie.</p>
+    <p>Voor de rest van wat je krijgt — agents, security AI, codespaces, autofix, hele pijplijn van issue → PR → merge → deploy — betaal je effectief <strong>niets extra</strong>.</p>
+    <p>En dan ship je nog meer product met dezelfde mensen, op een veiliger platform, terwijl je stopt met zelf infra-tooling bouwen.</p>
+  </div>
+
+  <div class="card warn">
+    <h3>Laten we het samen uitrekenen</h3>
+    <p>De getallen hierboven zijn algemeen. De échte business case wordt scherp als we het op jouw team toepassen: aantal engineers, gemiddelde PR-volume, review-tijd, fully-loaded cost per FTE, gemiddelde tijd-tot-merge, productie-incidenten per kwartaal.</p>
+    <p>Een half uur samen en we hebben een onderbouwd cijfer dat je intern kunt verdedigen — inclusief conservatieve en optimistische scenario's. Geen aannames, jullie context.</p>
+  </div>
+</section>
+
+<!-- 04 -->
 <section id="rekensom">
-  <div class="section-label"><span class="num">03</span>Het rekensommetje</div>
+  <div class="section-label"><span class="num">04</span>Het rekensommetje</div>
   <h2>"We bouwen het zelf"</h2>
   <p>Stel je hebt al 2 engineers, 1 maand bezig met één pipeline agent zelf bouwen. Dat is een concreet getal. Hou dat vast.</p>
 
@@ -562,9 +595,9 @@
   </div>
 </section>
 
-<!-- 04 -->
+<!-- 05 -->
 <section id="wat-je-mist">
-  <div class="section-label"><span class="num">04</span>Wat je mist op ADO</div>
+  <div class="section-label"><span class="num">05</span>Wat je mist op ADO</div>
   <h2>De capability gap, met directe links</h2>
   <p>Alles hieronder is GA op GitHub Enterprise Cloud (tenzij anders aangegeven) en niet of beperkt beschikbaar op Azure DevOps. Klik elke capability voor de officiële docs.</p>
 
@@ -659,9 +692,9 @@
   </div>
 </section>
 
-<!-- 05 -->
+<!-- 06 -->
 <section id="eu">
-  <div class="section-label"><span class="num">05</span>EU compliance</div>
+  <div class="section-label"><span class="num">06</span>EU compliance</div>
   <h2>AVG, NIS2, DORA — een apart hoofdstuk</h2>
   <p>Voor Nederlandse organisaties met AVG, NIS2 of DORA in scope is dit geen optie, het is een eis.</p>
   <div class="card accent">
@@ -674,9 +707,9 @@
   </div>
 </section>
 
-<!-- 06 -->
+<!-- 07 -->
 <section id="gap">
-  <div class="section-label"><span class="num">06</span>Het gat dat niet dicht gaat</h2></div>
+  <div class="section-label"><span class="num">07</span>Het gat dat niet dicht gaat</div>
   <h2>De ene gap die je nooit invult</h2>
   <div class="danger-card">
     <h3>⚠ Native AI op security findings</h3>
@@ -686,70 +719,45 @@
   </div>
 </section>
 
-<!-- 07 -->
-<section id="microsoft">
-  <div class="section-label"><span class="num">07</span>Wat Microsoft zelf doet</div>
-  <h2>De signalen die Microsoft afgeeft</h2>
-  <p>Microsoft bezit zowel ADO als GitHub. Kijk naar waar de R&amp;D investering en de roadmap energie heen gaan:</p>
-  <div class="card">
-    <ul>
-      <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps release notes</a> tonen vooral kleine verbeteringen en bugfixes. Geen nieuwe AI capabilities, geen nieuwe agents.</li>
-      <li>De <a href="https://github.blog/changelog/">GitHub changelog</a> publiceert wekelijks nieuwe features — agents, modellen, security AI, MCP support.</li>
-      <li>Microsoft heeft expliciet een <a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> en een <a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">Actions Importer voor ADO Pipelines</a> gebouwd. Een vendor maakt geen migratietools naar zijn andere product tenzij dat de gewenste richting is.</li>
-      <li>De <a href="https://devblogs.microsoft.com/devops/">Azure DevOps blog</a> verwijst zelf regelmatig naar GitHub voor nieuwe AI scenarios.</li>
-      <li>Microsoft engineering teams (Azure, Windows, Office) hosten hun open source op <a href="https://github.com/microsoft">github.com/microsoft</a>, niet op dev.azure.com.</li>
-    </ul>
-    <p>Dit is geen "ADO is dood" verhaal. ADO blijft draaien voor wie er op zit. Maar <strong>nieuwe investering — en zeker AI investering — gaat naar GitHub</strong>.</p>
-  </div>
-</section>
-
 <!-- 08 -->
-<section id="ea">
-  <div class="section-label"><span class="num">08</span>Bonus</div>
-  <h2>Het Microsoft EA voordeel</h2>
-  <div class="card">
-    <p>Voor organisaties met een bestaande Microsoft Enterprise Agreement: <a href="https://docs.github.com/en/billing/managing-billing-for-your-products/about-billing-on-github">GitHub Enterprise en Copilot</a> zijn beschikbaar via dezelfde MS EA.</p>
-    <p>Geen aparte vendor, geen aparte PO flow, gebruik je commit. <strong>Praktisch betekent dit dat procurement een non-issue is.</strong></p>
+<section id="microsoft">
+  <div class="section-label"><span class="num">08</span>Wat Microsoft zelf doet</div>
+  <h2>Microsoft bouwt zelf op GitHub. En zet daar zijn AI-toekomst op.</h2>
+  <p>Microsoft bezit zowel Azure DevOps als GitHub. Twee duidelijke signalen: waar bouwt Microsoft zelf op, en waar gaat de AI-investering heen?</p>
+
+  <h3 style="margin-top: 28px;">1. Microsoft's eigen engineering staat op GitHub</h3>
+  <ul>
+    <li><a href="https://github.com/microsoft">github.com/microsoft</a> — duizenden Microsoft repos, inclusief <a href="https://github.com/microsoft/vscode">VS Code</a>, <a href="https://github.com/microsoft/TypeScript">TypeScript</a>, <a href="https://github.com/microsoft/PowerToys">PowerToys</a>, <a href="https://github.com/microsoft/WSL">WSL</a>, <a href="https://github.com/microsoft/playwright">Playwright</a>.</li>
+    <li><a href="https://github.com/dotnet">github.com/dotnet</a> — het volledige .NET platform: runtime, ASP.NET, EF Core, MAUI. Niet op ADO.</li>
+    <li><a href="https://github.com/Azure">github.com/Azure</a> — Azure SDK's, Bicep, Terraform providers, ARM templates. De cloud waar je producten op draaien wordt ontwikkeld op GitHub.</li>
+    <li><a href="https://github.com/openai">OpenAI</a> — Microsoft's grootste AI-partner zit op GitHub, niet op ADO.</li>
+  </ul>
+
+  <h3 style="margin-top: 28px;">2. De AI-roadmap loopt via GitHub</h3>
+  <ul>
+    <li>De <a href="https://github.blog/changelog/">GitHub changelog</a> publiceert wekelijks nieuwe AI-features: <a href="https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent">coding agent</a>, <a href="https://docs.github.com/en/copilot/concepts/agents/anthropic-claude">Claude integratie</a>, <a href="https://docs.github.com/en/copilot/customizing-copilot/using-model-context-protocol/extending-copilot-chat-with-mcp">MCP support</a>, <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review">CCR</a>, <a href="https://docs.github.com/en/copilot/using-github-copilot/copilot-spaces/about-organizing-and-sharing-context-with-copilot-spaces">Spaces</a>, <a href="https://docs.github.com/en/copilot/customizing-copilot/about-customizing-github-copilot-chat-responses">custom instructions</a>.</li>
+    <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps release notes</a> tonen vooral kleine verbeteringen en bugfixes. Geen nieuwe agents, geen coding agents, geen AI code review.</li>
+    <li>De <a href="https://news.microsoft.com/source/2025/05/19/microsoft-build-2025/">Microsoft Build 2025 keynote</a> ging grotendeels over GitHub Copilot, niet over Azure DevOps. Coding agent, AI in security, agents in pull requests — allemaal op GitHub.</li>
+    <li>Satya Nadella positioneert GitHub publiekelijk als <em>"the home for all developers"</em> — niet ADO.</li>
+  </ul>
+
+  <h3 style="margin-top: 28px;">3. Microsoft bouwt zelf de migratiepaden</h3>
+  <ul>
+    <li><a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> — migratie van ADO repos naar GitHub, door Microsoft gebouwd en onderhouden.</li>
+    <li><a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">GitHub Actions Importer</a> — converteert Azure Pipelines YAML automatisch naar GitHub Actions.</li>
+    <li>Een vendor maakt geen first-party migratietools <em>van</em> zijn eigen product <em>naar</em> zijn andere product tenzij dat de strategische richting is.</li>
+  </ul>
+
+  <div class="card accent" style="margin-top: 28px;">
+    <p>Dit is geen "ADO is dood" verhaal. ADO blijft draaien voor wie er op zit. Maar als Microsoft zelf op GitHub bouwt, GitHub als AI-platform positioneert, en de migratietools bouwt — dan loont het de moeite om je eigen strategie tegen die richting te leggen.</p>
   </div>
 </section>
 
-<!-- 09 - CCR -->
-<section id="ccr">
-  <div class="section-label"><span class="num">09</span>De business case begint hier</div>
-  <h2>Eén feature dekt de hele licentie</h2>
-  <p>Je hoeft het hele platform niet eens te activeren om de business case rond te krijgen. Pak één capability: <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review"><strong>Copilot Code Review (CCR)</strong></a>.</p>
-  <p>CCR reviewt elke PR automatisch vóór een mens er naar kijkt. Style, bugs, security smells, performance — opgevangen voordat het in de review queue ligt.</p>
+<!-- 09 - CCR (moved up to section 03) -->
 
-  <div class="stat-grid">
-    <div class="stat">
-      <div class="num">30–50%</div>
-      <div class="label">minder review-tijd per PR (afhankelijk van team)</div>
-    </div>
-    <div class="stat">
-      <div class="num">↑ velocity</div>
-      <div class="label">meer PRs per week, dezelfde mensen</div>
-    </div>
-  </div>
-
-  <p>Reken een team van 20 engineers × gemiddeld 4u code review per week × NL senior rate. Op jaarbasis enkele tonnen aan review-tijd. CCR vangt een significant deel daarvan op.</p>
-
-  <div class="card accent">
-    <h3>Het volledige plaatje</h3>
-    <p>Alleen al de tijdwinst en de snellere merge cadence van CCR dekt in veel gevallen de complete GitHub Enterprise + Copilot licentie.</p>
-    <p>Voor de rest van wat je krijgt — agents, security AI, codespaces, autofix, hele pijplijn van issue → PR → merge → deploy — betaal je effectief <strong>niets extra</strong>.</p>
-    <p>En dan ship je nog meer product met dezelfde mensen, op een veiliger platform, terwijl je stopt met zelf infra-tooling bouwen.</p>
-  </div>
-
-  <div class="card warn">
-    <h3>Laten we het samen uitrekenen</h3>
-    <p>De getallen hierboven zijn algemeen. De échte business case wordt scherp als we het op jouw team toepassen: aantal engineers, gemiddelde PR-volume, review-tijd, fully-loaded cost per FTE, gemiddelde tijd-tot-merge, productie-incidenten per kwartaal.</p>
-    <p>Een half uur samen en we hebben een onderbouwd cijfer dat je intern kunt verdedigen — inclusief conservatieve en optimistische scenario's. Geen aannames, jullie context.</p>
-  </div>
-</section>
-
-<!-- 09.5 - Record Acceleration -->
+<!-- 09 - Record Acceleration -->
 <section id="acceleration">
-  <div class="section-label"><span class="num">10</span>Het platform onder dit alles</div>
+  <div class="section-label"><span class="num">09</span>Het platform onder dit alles</div>
   <h2>De versnelling is geen toeval</h2>
   <p>Voor wie zich afvraagt of GitHub momentum heeft, of dat dit een ADO-met-andere-naam wordt: kijk naar de cijfers. Dit is wat er over het hele GitHub-platform gebeurt op dit moment.</p>
 
