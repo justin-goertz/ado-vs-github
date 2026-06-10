@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Azure DevOps vs GitHub — een eerlijke vergelijking</title>
+<meta name="description" content="Wat je mist als je op Azure DevOps blijft, en wat het kost om die gaps zelf dicht te bouwen.">
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg-elev: #161b22;
+    --bg-card: #21262d;
+    --border: #30363d;
+    --text: #e6edf3;
+    --muted: #8d96a0;
+    --accent: #2f81f7;
+    --accent-soft: rgba(47, 129, 247, 0.12);
+    --warn: #f0883e;
+    --danger: #f85149;
+    --ok: #3fb950;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.55;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
+  header { border-bottom: 1px solid var(--border); padding-bottom: 32px; margin-bottom: 48px; }
+  .eyebrow { color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; }
+  h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; font-weight: 700; }
+  .lead { font-size: 18px; color: var(--muted); max-width: 640px; }
+  h2 { font-size: 24px; line-height: 1.2; margin: 48px 0 16px; letter-spacing: -0.01em; font-weight: 700; }
+  h2.section-num::before {
+    content: attr(data-num);
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    margin-right: 12px;
+    font-weight: 600;
+  }
+  h3 { font-size: 17px; margin: 28px 0 10px; font-weight: 600; }
+  p { margin-bottom: 14px; }
+  p + p { margin-top: 0; }
+  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
+  a:hover { border-bottom-color: var(--accent); }
+  ul { margin: 8px 0 16px 0; padding-left: 20px; }
+  li { margin-bottom: 8px; }
+  li strong { color: var(--text); }
+  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; color: var(--text); }
+
+  .callout { background: var(--bg-elev); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 20px 24px; margin: 24px 0; border-radius: 6px; }
+  .callout.warn { border-left-color: var(--warn); }
+  .callout.danger { border-left-color: var(--danger); }
+  .callout p:last-child { margin-bottom: 0; }
+  .callout h3 { margin-top: 0; }
+
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .stat { background: var(--bg-elev); border: 1px solid var(--border); padding: 18px 20px; border-radius: 6px; }
+  .stat .num { font-size: 28px; font-weight: 700; color: var(--accent); display: block; line-height: 1.1; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
+  .stat .label { font-size: 13px; color: var(--muted); }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { background: var(--bg-elev); font-weight: 600; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+  td:first-child { font-weight: 500; }
+  .ok { color: var(--ok); font-weight: 600; }
+  .no { color: var(--danger); font-weight: 600; }
+  .partial { color: var(--warn); font-weight: 600; }
+
+  .cta {
+    background: linear-gradient(135deg, var(--accent-soft), transparent);
+    border: 1px solid var(--accent);
+    padding: 28px 32px;
+    border-radius: 8px;
+    margin: 48px 0 24px;
+  }
+  .cta h2 { margin-top: 0; }
+
+  .sources { background: var(--bg-elev); border: 1px solid var(--border); padding: 20px 24px; border-radius: 6px; margin-top: 32px; font-size: 14px; }
+  .sources h3 { margin-top: 0; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sources ul { margin-top: 12px; }
+  .sources li { margin-bottom: 6px; }
+
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+  footer a { color: var(--muted); }
+
+  .quote { border-left: 3px solid var(--border); padding: 4px 0 4px 20px; margin: 16px 0; color: var(--muted); font-style: italic; }
+
+  .pill { display: inline-block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2px 10px; font-size: 12px; color: var(--muted); margin-right: 6px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="eyebrow">Korte vergelijking voor engineering leaders</div>
+  <h1>Het is niet Claude vs Copilot.<br>Het is Azure DevOps vs GitHub.</h1>
+  <p class="lead">De AI-modelkeuze is de makkelijke. De platformkeuze daaronder bepaalt wat je de komende 5 jaar wel of niet hoeft te bouwen.</p>
+</header>
+
+<h2 class="section-num" data-num="01">De aanleiding</h2>
+<p>Veel teams zijn op Azure DevOps gebleven omdat "Microsoft stack" een veilige keuze leek. Toen kwam AI. En toen werd de vraag: <em>welk model gebruiken we?</em></p>
+<p>Dat is de verkeerde vraag. De juiste vraag is: <strong>welk platform geeft me dat AI-model én alle andere dingen die ik er omheen nodig heb — zonder dat ik ze zelf moet bouwen?</strong></p>
+
+<h2 class="section-num" data-num="02">Eerst even: het Windows / .NET Framework verhaal</h2>
+<p>Een veelgehoord argument om op ADO te blijven: <em>"Onze legacy producten draaien op Windows, daar zit ADO dichter op."</em> Dat klopte. Het klopt niet meer.</p>
+<ul>
+  <li><a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners">GitHub-hosted Windows runners</a> draaien Windows Server 2019, 2022 en 2025 met de volledige .NET stack (Framework + Core), MSBuild, Visual Studio Build Tools, IIS-tooling, en PowerShell — out of the box.</li>
+  <li><a href="https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners">Self-hosted runners</a> draaien op je eigen Windows boxen voor wat niet naar SaaS kan.</li>
+  <li><a href="https://docs.github.com/en/copilot">GitHub Copilot</a> + de <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview">.NET Upgrade Assistant</a> zijn expliciet gebouwd om <a href="https://devblogs.microsoft.com/dotnet/upgrade-assistant-now-with-net-9/">.NET Framework → modern .NET</a> migraties te versnellen.</li>
+  <li>De Visual Studio integratie van GitHub is <a href="https://learn.microsoft.com/en-us/visualstudio/version-control/git-with-visual-studio">first-class</a> — dezelfde Microsoft-engineers bouwen het.</li>
+</ul>
+<p>Legacy is geen reden meer om te blijven. Het is een argument om over te stappen mét hulp.</p>
+
+<h2 class="section-num" data-num="03">Het rekensommetje achter "we bouwen het zelf"</h2>
+<p>Stel je hebt al 2 engineers, 1 maand bezig met één pipeline agent zelf bouwen. Dat is een concreet getal. Hou dat vast.</p>
+
+<div class="grid-2">
+  <div class="stat">
+    <span class="num">~€25–35k</span>
+    <span class="label">2 FTE × 1 maand all-in (NL senior dev rates)</span>
+  </div>
+  <div class="stat">
+    <span class="num">1 van ~20</span>
+    <span class="label">capabilities die GitHub native levert — die je dus zou moeten bouwen</span>
+  </div>
+</div>
+
+<p>Vermenigvuldig dat naar SAST, SCA, secret scanning, AI code review, security autofix, copilot metrics, audit streaming, etc. Snel zit je op een paar honderdduizend euro engineering tijd — alleen al om <em>op niveau te komen</em> van wat een GitHub seat per maand kost.</p>
+
+<div class="callout warn">
+  <h3>De verborgen kostenposten</h3>
+  <ul style="margin: 0;">
+    <li><strong>Maintenance forever.</strong> Wat je bouwt, moet je onderhouden. CodeQL queries, Dependabot ecosystem coverage, secret scanning patterns — dat zijn full-time research teams bij GitHub.</li>
+    <li><strong>Opportunity cost.</strong> Die 2 FTE bouwen geen product features.</li>
+    <li><strong>Talent.</strong> Senior devs solliciteren niet om interne CI plumbing te bouwen. Ze willen op een modern platform werken.</li>
+    <li><strong>Je komt nooit op niveau van native AI op security findings</strong> — zie sectie 06.</li>
+  </ul>
+</div>
+
+<h2 class="section-num" data-num="04">Wat je mist op ADO — met links</h2>
+<p>Alles hieronder is GA op GitHub Enterprise Cloud (tenzij anders aangegeven) en niet of beperkt beschikbaar op Azure DevOps.</p>
+
+<h3>Security & Compliance</h3>
+<table>
+<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
+<tbody>
+<tr><td><a href="https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql">CodeQL — native SAST</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/code-security/dependabot">Dependabot — SCA + auto-PRs</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning">Secret Scanning (200+ patterns)</a></td><td class="partial">Partial via GHAzDO</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-push-protection">Push Protection (block voor commit)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning">Copilot Autofix op SAST findings</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/code-security/securing-your-organization/introduction-to-securing-your-organization-at-scale/about-security-campaigns">Security Campaigns (bulk remediation)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/exporting-a-software-bill-of-materials-for-your-repository">SBOM export (SPDX)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+</tbody>
+</table>
+
+<h3>AI & Agents</h3>
+<table>
+<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
+<tbody>
+<tr><td><a href="https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent">Copilot coding agent (issue → PR)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/copilot/concepts/agents/anthropic-claude">Anthropic Claude coding agent</a></td><td class="no">Nee</td><td class="ok">Public preview</td></tr>
+<tr><td><a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review">AI PR review</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/copilot/using-github-copilot/copilot-spaces/about-organizing-and-sharing-context-with-copilot-spaces">Copilot Spaces (shared context)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/copilot/using-github-copilot/ai-models/changing-the-ai-model-for-copilot-chat">Multi-model picker (Claude, GPT, Gemini)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/copilot/building-copilot-extensions/about-building-copilot-extensions">Copilot Extensions + MCP</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/rest/copilot/copilot-metrics">Copilot Metrics API (ROI tracking)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+</tbody>
+</table>
+
+<h3>Developer Experience</h3>
+<table>
+<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
+<tbody>
+<tr><td><a href="https://docs.github.com/en/codespaces/overview">Codespaces (cloud dev env)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://github.com/marketplace?type=actions">Actions Marketplace (20.000+ acties)</a></td><td class="partial">~600 extensions</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners">macOS / large hosted runners</a></td><td class="partial">Beperkt</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/get-started/using-github/github-mobile">GitHub Mobile (review + Copilot)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects">Projects v2 (custom fields, automations)</a></td><td class="partial">ADO Boards</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/discussions">Discussions</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+</tbody>
+</table>
+
+<h3>Platform & Packaging</h3>
+<table>
+<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
+<tbody>
+<tr><td><a href="https://docs.github.com/en/packages">GitHub Packages (npm, NuGet, Maven, ...)</a></td><td class="partial">ADO Artifacts</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GHCR (container registry)</a></td><td class="partial">ACR apart</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/apps">GitHub Apps (eigen automations)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/pages">Pages (static hosting)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases">Releases (binaries + notes)</a></td><td class="partial">Basic</td><td class="ok">Ja</td></tr>
+</tbody>
+</table>
+
+<h3>Governance & Enterprise</h3>
+<table>
+<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
+<tbody>
+<tr><td><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise">Audit log streaming (S3 / Splunk / Azure)</a></td><td class="partial">Beperkt</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/managing-iam/using-enterprise-managed-users-for-iam/about-enterprise-managed-users">Enterprise Managed Users (EMU)</a></td><td class="partial">Via Entra</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets">Repository Rulesets</a></td><td class="partial">Policies</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">Fine-grained PATs</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
+<tr><td><a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-organization-roles">Custom roles</a></td><td class="partial">Basic</td><td class="ok">Ja</td></tr>
+</tbody>
+</table>
+
+<h2 class="section-num" data-num="05">EU compliance — een apart hoofdstuk</h2>
+<p>Voor Nederlandse organisaties met AVG, NIS2 of DORA in scope is dit geen optie, het is een eis.</p>
+<ul>
+  <li><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/about-github-enterprise-cloud-with-data-residency"><strong>GitHub Enterprise Cloud met Data Residency (GHE.com)</strong></a> — code, metadata, en audit logs blijven binnen de EU. Eigen subdomain (<code>*.ghe.com</code>), aparte tenancy, EU regio.</li>
+  <li><a href="https://github.blog/changelog/2025-04-15-copilot-data-residency-in-the-eu/"><strong>Copilot Data Residency in EU</strong></a> — prompts en completions verwerkt binnen EU regio.</li>
+  <li><a href="https://github.com/security">SOC 2 Type II, ISO 27001, FedRAMP Moderate</a> — full compliance stack.</li>
+</ul>
+<p>ADO heeft EU hosting, maar geen aparte EU-tenancy variant met dezelfde data residency garanties als GHE.com.</p>
+
+<h2 class="section-num" data-num="06">Het gat dat je nooit dicht krijgt</h2>
+<div class="callout danger">
+  <p>Sommige gaps zijn op te lossen met budget en tijd. <strong>Native AI op security findings niet.</strong></p>
+  <p>Dat werkt alleen als je <a href="https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql">CodeQL (SAST)</a> en <a href="https://docs.github.com/en/code-security/dependabot">Dependabot (SCA)</a> als platform-basis hebt. Daar is <a href="https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning">Copilot Autofix</a> bovenop gebouwd.</p>
+  <p>Zelfs als je security tooling van derde partijen koopt en eraan vast plakt, krijg je nooit dezelfde geïntegreerde flow: <strong>vinding → AI-suggestie → autofix → PR → merge</strong>, binnen één platform met één audit trail.</p>
+</div>
+
+<h2 class="section-num" data-num="07">De signalen die Microsoft zelf geeft</h2>
+<p>Microsoft bezit zowel ADO als GitHub. Kijk naar waar de R&D investering en de roadmap energie heen gaan:</p>
+<ul>
+  <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps release notes</a> tonen vooral kleine verbeteringen en bugfixes. Geen nieuwe AI capabilities, geen nieuwe agents.</li>
+  <li>De <a href="https://github.blog/changelog/">GitHub changelog</a> publiceert wekelijks nieuwe features — agents, modellen, security AI, MCP support.</li>
+  <li>Microsoft heeft expliciet een <a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> en een <a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">Actions Importer voor ADO Pipelines</a> gebouwd. Een vendor maakt geen migratietools naar zijn andere product tenzij dat de gewenste richting is.</li>
+  <li>De <a href="https://devblogs.microsoft.com/devops/">Azure DevOps blog</a> verwijst zelf regelmatig naar GitHub voor nieuwe AI scenarios.</li>
+  <li>Microsoft engineering teams (Azure, Windows, Office) hosten hun open source op <a href="https://github.com/microsoft">github.com/microsoft</a>, niet op dev.azure.com.</li>
+</ul>
+<p>Dit is geen "ADO is dood" verhaal. ADO blijft draaien voor wie er op zit. Maar nieuwe investering — en zeker AI investering — gaat naar GitHub.</p>
+
+<h2 class="section-num" data-num="08">Bonus: het Microsoft EA voordeel</h2>
+<p>Voor organisaties met een bestaande Microsoft Enterprise Agreement: <a href="https://docs.github.com/en/billing/managing-billing-for-your-products/about-billing-on-github">GitHub Enterprise en Copilot</a> zijn beschikbaar via dezelfde MS EA. Geen aparte vendor, geen aparte PO flow, gebruik je commit. Praktisch betekent dit dat procurement een non-issue is.</p>
+
+<h2 class="section-num" data-num="09">De juiste vraag</h2>
+<div class="callout">
+  <p><strong>Niet:</strong> "Wat is goedkoper, Claude direct of Copilot?"</p>
+  <p><strong>Wel:</strong> "Op welk platform bouwen we de komende 5 jaar — en hoeveel zelf-bouw stoppen we erin om datzelfde platform niveau te halen?"</p>
+</div>
+
+<div class="cta">
+  <h2 style="margin-top:0">Volgende stap</h2>
+  <p>Als dit verhaal raakt aan iets dat bij jou speelt — een ADO migratie die op pauze staat, een team dat custom agents gaat bouwen, of een AI strategie waar het platform onder ontbreekt — neem dan contact op met je GitHub team.</p>
+  <p>De vraag is niet <em>of</em> je naar GitHub gaat. De vraag is <em>wanneer</em>, en hoeveel je tot dan toe zelf hebt gebouwd dat je daarna weer weggooit.</p>
+</div>
+
+<div class="sources">
+  <h3>Bronnen</h3>
+  <ul>
+    <li><a href="https://docs.github.com">GitHub Documentation</a> — alle features hierboven gelinkt</li>
+    <li><a href="https://github.blog/changelog/">GitHub Changelog</a> — release cadence</li>
+    <li><a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps Release Notes</a> — vergelijk cadence</li>
+    <li><a href="https://docs.github.com/en/migrations/using-github-enterprise-importer">GitHub Enterprise Importer</a> — Microsoft's eigen migratietool</li>
+    <li><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/about-github-enterprise-cloud-with-data-residency">GHE.com Data Residency</a></li>
+    <li><a href="https://github.com/security">GitHub Trust Center</a> — compliance certificeringen</li>
+  </ul>
+</div>
+
+<footer>
+  <p>Gemaakt voor engineering leaders die de platformkeuze nog niet definitief gemaakt hebben.<br>
+  Updates: <a href="https://github.blog/changelog/">github.blog/changelog</a> · <a href="https://docs.github.com">docs.github.com</a></p>
+</footer>
+
+</div>
+</body>
+</html>
