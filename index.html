@@ -241,7 +241,30 @@
 <h2 class="section-num" data-num="08">Bonus: het Microsoft EA voordeel</h2>
 <p>Voor organisaties met een bestaande Microsoft Enterprise Agreement: <a href="https://docs.github.com/en/billing/managing-billing-for-your-products/about-billing-on-github">GitHub Enterprise en Copilot</a> zijn beschikbaar via dezelfde MS EA. Geen aparte vendor, geen aparte PO flow, gebruik je commit. Praktisch betekent dit dat procurement een non-issue is.</p>
 
-<h2 class="section-num" data-num="09">De juiste vraag</h2>
+<h2 class="section-num" data-num="09">De business case begint bij één feature</h2>
+<p>Je hoeft het hele platform niet eens te activeren om de business case rond te krijgen. Pak één capability: <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review"><strong>Copilot Code Review (CCR)</strong></a>.</p>
+
+<p>CCR reviewt elke PR automatisch vóór een mens er naar kijkt. Style, bugs, security smells, performance — opgevangen voordat het in de review queue ligt.</p>
+
+<div class="grid-2">
+  <div class="stat">
+    <span class="num">~30–50%</span>
+    <span class="label">minder review-tijd per PR (afhankelijk van team)</span>
+  </div>
+  <div class="stat">
+    <span class="num">↑ merge velocity</span>
+    <span class="label">meer PRs per week dezelfde mensen</span>
+  </div>
+</div>
+
+<p>Reken een team van 20 engineers, gemiddeld 4u code review per week per dev, NL senior rate. Dat is op jaarbasis enkele tonnen aan review-tijd. CCR vangt een significant deel daarvan op.</p>
+
+<div class="callout">
+  <p><strong>Het rekensommetje:</strong> alleen al de tijdwinst en de snellere merge cadence van CCR dekt in veel gevallen de complete GitHub Enterprise + Copilot licentie. Voor de rest van wat je krijgt — agents, security AI, codespaces, autofix, hele pijplijn issue → PR → merge → deploy — betaal je effectief niets extra.</p>
+  <p>En dan ship je nog meer product met dezelfde mensen, op een veiliger platform, terwijl je stopt met zelf infra-tooling bouwen.</p>
+</div>
+
+<h2 class="section-num" data-num="10">De juiste vraag</h2>
 <div class="callout">
   <p><strong>Niet:</strong> "Wat is goedkoper, Claude direct of Copilot?"</p>
   <p><strong>Wel:</strong> "Op welk platform bouwen we de komende 5 jaar — en hoeveel zelf-bouw stoppen we erin om datzelfde platform niveau te halen?"</p>
