@@ -5,274 +5,811 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Azure DevOps vs GitHub — een eerlijke vergelijking</title>
 <meta name="description" content="Wat je mist als je op Azure DevOps blijft, en wat het kost om die gaps zelf dicht te bouwen.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0d1117;
-    --bg-elev: #161b22;
-    --bg-card: #21262d;
-    --border: #30363d;
-    --text: #e6edf3;
-    --muted: #8d96a0;
+    --bg: #010409;
+    --bg-elev: #0d1117;
+    --bg-card: #151b23;
+    --bg-card-hover: #1c232c;
+    --border: #2a313c;
+    --border-strong: #3d444d;
+    --text: #f0f6fc;
+    --text-soft: #c9d1d9;
+    --muted: #8b949e;
     --accent: #2f81f7;
-    --accent-soft: rgba(47, 129, 247, 0.12);
-    --warn: #f0883e;
-    --danger: #f85149;
-    --ok: #3fb950;
+    --accent-glow: rgba(47, 129, 247, 0.4);
+    --purple: #a371f7;
+    --green: #3fb950;
+    --orange: #f0883e;
+    --red: #f85149;
+    --gradient-hero: linear-gradient(135deg, #2f81f7 0%, #a371f7 100%);
+    --gradient-danger: linear-gradient(135deg, #f85149 0%, #f0883e 100%);
+    --gradient-success: linear-gradient(135deg, #3fb950 0%, #2f81f7 100%);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     background: var(--bg);
     color: var(--text);
-    line-height: 1.55;
+    line-height: 1.6;
     font-size: 16px;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
-  .wrap { max-width: 880px; margin: 0 auto; padding: 64px 24px 96px; }
-  header { border-bottom: 1px solid var(--border); padding-bottom: 32px; margin-bottom: 48px; }
-  .eyebrow { color: var(--accent); font-size: 13px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 12px; }
-  h1 { font-size: clamp(28px, 5vw, 42px); line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 16px; font-weight: 700; }
-  .lead { font-size: 18px; color: var(--muted); max-width: 640px; }
-  h2 { font-size: 24px; line-height: 1.2; margin: 48px 0 16px; letter-spacing: -0.01em; font-weight: 700; }
-  h2.section-num::before {
-    content: attr(data-num);
+
+  /* Background glow */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(47, 129, 247, 0.15) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+  /* ---------- HERO ---------- */
+  .hero {
+    padding: 100px 0 80px;
+    text-align: center;
+  }
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 32px;
+  }
+  .badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
+  .hero h1 {
+    font-size: clamp(36px, 7vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+    margin-bottom: 24px;
+  }
+  .hero h1 .gradient {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .hero .lead {
+    font-size: clamp(17px, 2vw, 20px);
+    color: var(--muted);
+    max-width: 640px;
+    margin: 0 auto;
+    line-height: 1.55;
+  }
+
+  /* ---------- SECTIONS ---------- */
+  section { padding: 60px 0; position: relative; }
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 13px;
+    font-weight: 600;
     color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+  }
+  .section-label .num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--bg-card);
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+  }
+  h2 {
+    font-size: clamp(26px, 4vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+  h3 { font-size: 19px; margin-bottom: 12px; font-weight: 600; }
+  p { color: var(--text-soft); margin-bottom: 16px; }
+  p:last-child { margin-bottom: 0; }
+  a { color: var(--accent); text-decoration: none; transition: color 0.15s; }
+  a:hover { color: #58a6ff; text-decoration: underline; text-underline-offset: 3px; }
+  strong { color: var(--text); font-weight: 600; }
+  em { font-style: italic; color: var(--text); }
+
+  ul { margin: 12px 0 16px 0; padding-left: 0; list-style: none; }
+  ul li {
+    padding-left: 28px;
+    margin-bottom: 10px;
+    position: relative;
+    color: var(--text-soft);
+  }
+  ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--accent);
+    font-weight: 700;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
+    font-size: 13px;
+    background: var(--bg-card);
+    padding: 2px 8px;
+    border-radius: 4px;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+
+  /* ---------- CARDS ---------- */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin: 20px 0;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card.accent { border-left: 3px solid var(--accent); }
+  .card.danger { border-color: rgba(248, 81, 73, 0.3); background: linear-gradient(135deg, rgba(248, 81, 73, 0.06), transparent); }
+  .card.warn { border-left: 3px solid var(--orange); }
+
+  /* ---------- STATS ---------- */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin: 28px 0;
+  }
+  @media (max-width: 640px) { .stat-grid { grid-template-columns: 1fr; } }
+  .stat {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+  .stat::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--gradient-hero);
+  }
+  .stat .num {
+    font-size: 36px;
+    font-weight: 800;
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    line-height: 1.1;
+    margin-bottom: 6px;
     font-variant-numeric: tabular-nums;
-    margin-right: 12px;
+    letter-spacing: -0.02em;
+  }
+  .stat .label {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  /* ---------- ACCELERATION GRID ---------- */
+  .accel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 32px 0 12px;
+  }
+  @media (max-width: 720px) { .accel-grid { grid-template-columns: 1fr; } }
+  .accel-card {
+    background: linear-gradient(180deg, #0d1117 0%, #010409 100%);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .accel-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #3fb950, transparent);
+  }
+  .accel-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .accel-num {
+    font-size: 44px;
+    font-weight: 800;
+    color: #3fb950;
+    line-height: 1;
+    margin-bottom: 16px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.03em;
+    text-shadow: 0 0 24px rgba(63, 185, 80, 0.3);
+  }
+  .accel-spark {
+    width: 100%;
+    height: 80px;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .accel-axis {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ---------- CAPABILITY TABLES IN CARDS ---------- */
+  .cap-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+  .cap-header {
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-elev);
+  }
+  .cap-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .cap-icon.security { background: rgba(248, 81, 73, 0.15); color: var(--red); }
+  .cap-icon.ai { background: rgba(163, 113, 247, 0.15); color: var(--purple); }
+  .cap-icon.devex { background: rgba(63, 185, 80, 0.15); color: var(--green); }
+  .cap-icon.platform { background: rgba(47, 129, 247, 0.15); color: var(--accent); }
+  .cap-icon.gov { background: rgba(240, 136, 62, 0.15); color: var(--orange); }
+  .cap-title { font-size: 17px; font-weight: 600; color: var(--text); }
+  .cap-subtitle { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  .cap-row {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px;
+    align-items: center;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    transition: background 0.15s;
+  }
+  .cap-row:last-child { border-bottom: none; }
+  .cap-row:hover { background: var(--bg-card-hover); }
+  .cap-row .name { font-size: 14.5px; }
+  .cap-row .name a { color: var(--text); border-bottom: 1px dotted var(--border-strong); }
+  .cap-row .name a:hover { color: var(--accent); border-bottom-color: var(--accent); text-decoration: none; }
+  .cap-cell {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .cell-yes { color: var(--green); background: rgba(63, 185, 80, 0.1); }
+  .cell-no { color: var(--red); background: rgba(248, 81, 73, 0.1); }
+  .cell-partial { color: var(--orange); background: rgba(240, 136, 62, 0.1); }
+  .cap-row-header {
+    display: grid;
+    grid-template-columns: 1fr 90px 90px;
+    padding: 10px 28px;
+    background: var(--bg-elev);
+    border-bottom: 1px solid var(--border);
+    gap: 12px;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
     font-weight: 600;
   }
-  h3 { font-size: 17px; margin: 28px 0 10px; font-weight: 600; }
-  p { margin-bottom: 14px; }
-  p + p { margin-top: 0; }
-  a { color: var(--accent); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.15s; }
-  a:hover { border-bottom-color: var(--accent); }
-  ul { margin: 8px 0 16px 0; padding-left: 20px; }
-  li { margin-bottom: 8px; }
-  li strong { color: var(--text); }
-  code { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; background: var(--bg-card); padding: 2px 6px; border-radius: 4px; color: var(--text); }
+  .cap-row-header div:nth-child(2), .cap-row-header div:nth-child(3) { text-align: center; }
 
-  .callout { background: var(--bg-elev); border: 1px solid var(--border); border-left: 3px solid var(--accent); padding: 20px 24px; margin: 24px 0; border-radius: 6px; }
-  .callout.warn { border-left-color: var(--warn); }
-  .callout.danger { border-left-color: var(--danger); }
-  .callout p:last-child { margin-bottom: 0; }
-  .callout h3 { margin-top: 0; }
-
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
-  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
-  .stat { background: var(--bg-elev); border: 1px solid var(--border); padding: 18px 20px; border-radius: 6px; }
-  .stat .num { font-size: 28px; font-weight: 700; color: var(--accent); display: block; line-height: 1.1; margin-bottom: 4px; font-variant-numeric: tabular-nums; }
-  .stat .label { font-size: 13px; color: var(--muted); }
-
-  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; }
-  th { background: var(--bg-elev); font-weight: 600; font-size: 13px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  td:first-child { font-weight: 500; }
-  .ok { color: var(--ok); font-weight: 600; }
-  .no { color: var(--danger); font-weight: 600; }
-  .partial { color: var(--warn); font-weight: 600; }
-
-  .cta {
-    background: linear-gradient(135deg, var(--accent-soft), transparent);
-    border: 1px solid var(--accent);
-    padding: 28px 32px;
-    border-radius: 8px;
-    margin: 48px 0 24px;
+  /* ---------- DANGER CARD ---------- */
+  .danger-card {
+    background: linear-gradient(135deg, rgba(248, 81, 73, 0.08), rgba(248, 81, 73, 0.02));
+    border: 1px solid rgba(248, 81, 73, 0.3);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 28px 0;
+    position: relative;
+    overflow: hidden;
   }
-  .cta h2 { margin-top: 0; }
+  .danger-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+    background: var(--gradient-danger);
+  }
+  .danger-card h3 {
+    color: var(--red);
+    font-size: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
 
-  .sources { background: var(--bg-elev); border: 1px solid var(--border); padding: 20px 24px; border-radius: 6px; margin-top: 32px; font-size: 14px; }
-  .sources h3 { margin-top: 0; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
-  .sources ul { margin-top: 12px; }
-  .sources li { margin-bottom: 6px; }
+  /* ---------- QUOTE / QUESTION CARD ---------- */
+  .question-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    margin: 28px 0;
+  }
+  .q-row { padding: 12px 0; }
+  .q-row + .q-row { border-top: 1px solid var(--border); }
+  .q-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .q-label.bad { color: var(--red); }
+  .q-label.good { color: var(--green); }
+  .q-text { font-size: 17px; color: var(--text); }
 
-  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-size: 13px; text-align: center; }
+  /* ---------- CTA ---------- */
+  .cta-card {
+    background: linear-gradient(135deg, rgba(47, 129, 247, 0.15), rgba(163, 113, 247, 0.1));
+    border: 1px solid rgba(47, 129, 247, 0.4);
+    border-radius: 16px;
+    padding: 48px 40px;
+    margin: 48px 0 24px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .cta-card::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: linear-gradient(135deg, transparent, rgba(47, 129, 247, 0.5), transparent);
+    border-radius: 16px;
+    z-index: -1;
+    opacity: 0.5;
+  }
+  .cta-card h2 {
+    background: var(--gradient-hero);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 16px;
+  }
+  .cta-card p { font-size: 17px; max-width: 560px; margin: 0 auto 16px; }
+
+  /* ---------- SOURCES ---------- */
+  .sources {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 28px;
+    margin-top: 40px;
+  }
+  .sources h3 {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  .sources ul { margin: 0; }
+  .sources li { margin-bottom: 8px; }
+
+  /* ---------- FOOTER ---------- */
+  footer {
+    margin-top: 80px;
+    padding: 32px 0 48px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 13px;
+    text-align: center;
+  }
   footer a { color: var(--muted); }
 
-  .quote { border-left: 3px solid var(--border); padding: 4px 0 4px 20px; margin: 16px 0; color: var(--muted); font-style: italic; }
+  /* ---------- NAV PILLS ---------- */
+  .nav-pills {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 40px;
+  }
+  .nav-pills a {
+    display: inline-block;
+    padding: 6px 14px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--text-soft);
+    transition: all 0.15s;
+  }
+  .nav-pills a:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    text-decoration: none;
+  }
 
-  .pill { display: inline-block; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 2px 10px; font-size: 12px; color: var(--muted); margin-right: 6px; }
+  /* ---------- DIVIDER ---------- */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border-strong), transparent);
+    margin: 20px 0;
+  }
 </style>
 </head>
 <body>
+
 <div class="wrap">
 
-<header>
-  <div class="eyebrow">Korte vergelijking voor engineering leaders</div>
-  <h1>Het is niet Claude vs Copilot.<br>Het is Azure DevOps vs GitHub.</h1>
+<!-- HERO -->
+<div class="hero">
+  <div class="badge"><span class="dot"></span>Voor engineering leaders die de platformkeuze nog niet definitief gemaakt hebben</div>
+  <h1>Het is niet Claude vs Copilot.<br><span class="gradient">Het is Azure DevOps vs GitHub.</span></h1>
   <p class="lead">De AI-modelkeuze is de makkelijke. De platformkeuze daaronder bepaalt wat je de komende 5 jaar wel of niet hoeft te bouwen.</p>
-</header>
-
-<h2 class="section-num" data-num="01">De aanleiding</h2>
-<p>Veel teams zijn op Azure DevOps gebleven omdat "Microsoft stack" een veilige keuze leek. Toen kwam AI. En toen werd de vraag: <em>welk model gebruiken we?</em></p>
-<p>Dat is de verkeerde vraag. De juiste vraag is: <strong>welk platform geeft me dat AI-model én alle andere dingen die ik er omheen nodig heb — zonder dat ik ze zelf moet bouwen?</strong></p>
-
-<h2 class="section-num" data-num="02">Eerst even: het Windows / .NET Framework verhaal</h2>
-<p>Een veelgehoord argument om op ADO te blijven: <em>"Onze legacy producten draaien op Windows, daar zit ADO dichter op."</em> Dat klopte. Het klopt niet meer.</p>
-<ul>
-  <li><a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners">GitHub-hosted Windows runners</a> draaien Windows Server 2019, 2022 en 2025 met de volledige .NET stack (Framework + Core), MSBuild, Visual Studio Build Tools, IIS-tooling, en PowerShell — out of the box.</li>
-  <li><a href="https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners">Self-hosted runners</a> draaien op je eigen Windows boxen voor wat niet naar SaaS kan.</li>
-  <li><a href="https://docs.github.com/en/copilot">GitHub Copilot</a> + de <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview">.NET Upgrade Assistant</a> zijn expliciet gebouwd om <a href="https://devblogs.microsoft.com/dotnet/upgrade-assistant-now-with-net-9/">.NET Framework → modern .NET</a> migraties te versnellen.</li>
-  <li>De Visual Studio integratie van GitHub is <a href="https://learn.microsoft.com/en-us/visualstudio/version-control/git-with-visual-studio">first-class</a> — dezelfde Microsoft-engineers bouwen het.</li>
-</ul>
-<p>Legacy is geen reden meer om te blijven. Het is een argument om over te stappen mét hulp.</p>
-
-<h2 class="section-num" data-num="03">Het rekensommetje achter "we bouwen het zelf"</h2>
-<p>Stel je hebt al 2 engineers, 1 maand bezig met één pipeline agent zelf bouwen. Dat is een concreet getal. Hou dat vast.</p>
-
-<div class="grid-2">
-  <div class="stat">
-    <span class="num">~€25–35k</span>
-    <span class="label">2 FTE × 1 maand all-in (NL senior dev rates)</span>
-  </div>
-  <div class="stat">
-    <span class="num">1 van ~20</span>
-    <span class="label">capabilities die GitHub native levert — die je dus zou moeten bouwen</span>
+  <div class="nav-pills">
+    <a href="#aanleiding">Aanleiding</a>
+    <a href="#legacy">Legacy / Windows</a>
+    <a href="#rekensom">Het rekensommetje</a>
+    <a href="#wat-je-mist">Wat je mist</a>
+    <a href="#eu">EU compliance</a>
+    <a href="#gap">Het gat dat niet dicht gaat</a>
+    <a href="#microsoft">Wat Microsoft zelf doet</a>
+    <a href="#ea">MS EA voordeel</a>
+    <a href="#ccr">CCR business case</a>
+    <a href="#acceleration">Momentum</a>
   </div>
 </div>
 
-<p>Vermenigvuldig dat naar SAST, SCA, secret scanning, AI code review, security autofix, copilot metrics, audit streaming, etc. Snel zit je op een paar honderdduizend euro engineering tijd — alleen al om <em>op niveau te komen</em> van wat een GitHub seat per maand kost.</p>
-
-<div class="callout warn">
-  <h3>De verborgen kostenposten</h3>
-  <ul style="margin: 0;">
-    <li><strong>Maintenance forever.</strong> Wat je bouwt, moet je onderhouden. CodeQL queries, Dependabot ecosystem coverage, secret scanning patterns — dat zijn full-time research teams bij GitHub.</li>
-    <li><strong>Opportunity cost.</strong> Die 2 FTE bouwen geen product features.</li>
-    <li><strong>Talent.</strong> Senior devs solliciteren niet om interne CI plumbing te bouwen. Ze willen op een modern platform werken.</li>
-    <li><strong>Je komt nooit op niveau van native AI op security findings</strong> — zie sectie 06.</li>
-  </ul>
-</div>
-
-<h2 class="section-num" data-num="04">Wat je mist op ADO — met links</h2>
-<p>Alles hieronder is GA op GitHub Enterprise Cloud (tenzij anders aangegeven) en niet of beperkt beschikbaar op Azure DevOps.</p>
-
-<h3>Security & Compliance</h3>
-<table>
-<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
-<tbody>
-<tr><td><a href="https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql">CodeQL — native SAST</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/code-security/dependabot">Dependabot — SCA + auto-PRs</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning">Secret Scanning (200+ patterns)</a></td><td class="partial">Partial via GHAzDO</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-push-protection">Push Protection (block voor commit)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning">Copilot Autofix op SAST findings</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/code-security/securing-your-organization/introduction-to-securing-your-organization-at-scale/about-security-campaigns">Security Campaigns (bulk remediation)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/exporting-a-software-bill-of-materials-for-your-repository">SBOM export (SPDX)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-</tbody>
-</table>
-
-<h3>AI & Agents</h3>
-<table>
-<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
-<tbody>
-<tr><td><a href="https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent">Copilot coding agent (issue → PR)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/copilot/concepts/agents/anthropic-claude">Anthropic Claude coding agent</a></td><td class="no">Nee</td><td class="ok">Public preview</td></tr>
-<tr><td><a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review">AI PR review</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/copilot/using-github-copilot/copilot-spaces/about-organizing-and-sharing-context-with-copilot-spaces">Copilot Spaces (shared context)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/copilot/using-github-copilot/ai-models/changing-the-ai-model-for-copilot-chat">Multi-model picker (Claude, GPT, Gemini)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/copilot/building-copilot-extensions/about-building-copilot-extensions">Copilot Extensions + MCP</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/rest/copilot/copilot-metrics">Copilot Metrics API (ROI tracking)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-</tbody>
-</table>
-
-<h3>Developer Experience</h3>
-<table>
-<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
-<tbody>
-<tr><td><a href="https://docs.github.com/en/codespaces/overview">Codespaces (cloud dev env)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://github.com/marketplace?type=actions">Actions Marketplace (20.000+ acties)</a></td><td class="partial">~600 extensions</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners">macOS / large hosted runners</a></td><td class="partial">Beperkt</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/get-started/using-github/github-mobile">GitHub Mobile (review + Copilot)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects">Projects v2 (custom fields, automations)</a></td><td class="partial">ADO Boards</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/discussions">Discussions</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-</tbody>
-</table>
-
-<h3>Platform & Packaging</h3>
-<table>
-<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
-<tbody>
-<tr><td><a href="https://docs.github.com/en/packages">GitHub Packages (npm, NuGet, Maven, ...)</a></td><td class="partial">ADO Artifacts</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GHCR (container registry)</a></td><td class="partial">ACR apart</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/apps">GitHub Apps (eigen automations)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/pages">Pages (static hosting)</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases">Releases (binaries + notes)</a></td><td class="partial">Basic</td><td class="ok">Ja</td></tr>
-</tbody>
-</table>
-
-<h3>Governance & Enterprise</h3>
-<table>
-<thead><tr><th>Capability</th><th>Azure DevOps</th><th>GitHub</th></tr></thead>
-<tbody>
-<tr><td><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise">Audit log streaming (S3 / Splunk / Azure)</a></td><td class="partial">Beperkt</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/managing-iam/using-enterprise-managed-users-for-iam/about-enterprise-managed-users">Enterprise Managed Users (EMU)</a></td><td class="partial">Via Entra</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets">Repository Rulesets</a></td><td class="partial">Policies</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">Fine-grained PATs</a></td><td class="no">Nee</td><td class="ok">Ja</td></tr>
-<tr><td><a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-organization-roles">Custom roles</a></td><td class="partial">Basic</td><td class="ok">Ja</td></tr>
-</tbody>
-</table>
-
-<h2 class="section-num" data-num="05">EU compliance — een apart hoofdstuk</h2>
-<p>Voor Nederlandse organisaties met AVG, NIS2 of DORA in scope is dit geen optie, het is een eis.</p>
-<ul>
-  <li><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/about-github-enterprise-cloud-with-data-residency"><strong>GitHub Enterprise Cloud met Data Residency (GHE.com)</strong></a> — code, metadata, en audit logs blijven binnen de EU. Eigen subdomain (<code>*.ghe.com</code>), aparte tenancy, EU regio.</li>
-  <li><a href="https://github.blog/changelog/2025-04-15-copilot-data-residency-in-the-eu/"><strong>Copilot Data Residency in EU</strong></a> — prompts en completions verwerkt binnen EU regio.</li>
-  <li><a href="https://github.com/security">SOC 2 Type II, ISO 27001, FedRAMP Moderate</a> — full compliance stack.</li>
-</ul>
-<p>ADO heeft EU hosting, maar geen aparte EU-tenancy variant met dezelfde data residency garanties als GHE.com.</p>
-
-<h2 class="section-num" data-num="06">Het gat dat je nooit dicht krijgt</h2>
-<div class="callout danger">
-  <p>Sommige gaps zijn op te lossen met budget en tijd. <strong>Native AI op security findings niet.</strong></p>
-  <p>Dat werkt alleen als je <a href="https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql">CodeQL (SAST)</a> en <a href="https://docs.github.com/en/code-security/dependabot">Dependabot (SCA)</a> als platform-basis hebt. Daar is <a href="https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning">Copilot Autofix</a> bovenop gebouwd.</p>
-  <p>Zelfs als je security tooling van derde partijen koopt en eraan vast plakt, krijg je nooit dezelfde geïntegreerde flow: <strong>vinding → AI-suggestie → autofix → PR → merge</strong>, binnen één platform met één audit trail.</p>
-</div>
-
-<h2 class="section-num" data-num="07">De signalen die Microsoft zelf geeft</h2>
-<p>Microsoft bezit zowel ADO als GitHub. Kijk naar waar de R&D investering en de roadmap energie heen gaan:</p>
-<ul>
-  <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps release notes</a> tonen vooral kleine verbeteringen en bugfixes. Geen nieuwe AI capabilities, geen nieuwe agents.</li>
-  <li>De <a href="https://github.blog/changelog/">GitHub changelog</a> publiceert wekelijks nieuwe features — agents, modellen, security AI, MCP support.</li>
-  <li>Microsoft heeft expliciet een <a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> en een <a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">Actions Importer voor ADO Pipelines</a> gebouwd. Een vendor maakt geen migratietools naar zijn andere product tenzij dat de gewenste richting is.</li>
-  <li>De <a href="https://devblogs.microsoft.com/devops/">Azure DevOps blog</a> verwijst zelf regelmatig naar GitHub voor nieuwe AI scenarios.</li>
-  <li>Microsoft engineering teams (Azure, Windows, Office) hosten hun open source op <a href="https://github.com/microsoft">github.com/microsoft</a>, niet op dev.azure.com.</li>
-</ul>
-<p>Dit is geen "ADO is dood" verhaal. ADO blijft draaien voor wie er op zit. Maar nieuwe investering — en zeker AI investering — gaat naar GitHub.</p>
-
-<h2 class="section-num" data-num="08">Bonus: het Microsoft EA voordeel</h2>
-<p>Voor organisaties met een bestaande Microsoft Enterprise Agreement: <a href="https://docs.github.com/en/billing/managing-billing-for-your-products/about-billing-on-github">GitHub Enterprise en Copilot</a> zijn beschikbaar via dezelfde MS EA. Geen aparte vendor, geen aparte PO flow, gebruik je commit. Praktisch betekent dit dat procurement een non-issue is.</p>
-
-<h2 class="section-num" data-num="09">De business case begint bij één feature</h2>
-<p>Je hoeft het hele platform niet eens te activeren om de business case rond te krijgen. Pak één capability: <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review"><strong>Copilot Code Review (CCR)</strong></a>.</p>
-
-<p>CCR reviewt elke PR automatisch vóór een mens er naar kijkt. Style, bugs, security smells, performance — opgevangen voordat het in de review queue ligt.</p>
-
-<div class="grid-2">
-  <div class="stat">
-    <span class="num">~30–50%</span>
-    <span class="label">minder review-tijd per PR (afhankelijk van team)</span>
+<!-- 01 -->
+<section id="aanleiding">
+  <div class="section-label"><span class="num">01</span>De aanleiding</div>
+  <h2>De vraag is veranderd</h2>
+  <div class="card accent">
+    <p>Veel teams zijn op Azure DevOps gebleven omdat <em>"Microsoft stack"</em> een veilige keuze leek. Toen kwam AI. En toen werd de vraag: <em>welk model gebruiken we?</em></p>
+    <p>Dat is de verkeerde vraag. De juiste vraag is: <strong>welk platform geeft me dat AI-model én alle andere dingen die ik er omheen nodig heb — zonder dat ik ze zelf moet bouwen?</strong></p>
   </div>
-  <div class="stat">
-    <span class="num">↑ merge velocity</span>
-    <span class="label">meer PRs per week dezelfde mensen</span>
+</section>
+
+<!-- 02 -->
+<section id="legacy">
+  <div class="section-label"><span class="num">02</span>Het Windows / .NET verhaal</div>
+  <h2>"Maar onze legacy producten…"</h2>
+  <p>Een veelgehoord argument om op ADO te blijven: <em>"Onze legacy producten draaien op Windows, daar zit ADO dichter op."</em> Dat klopte. Het klopt niet meer.</p>
+  <div class="card">
+    <ul>
+      <li><a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners">GitHub-hosted Windows runners</a> draaien Windows Server 2019, 2022 en 2025 met de volledige .NET stack (Framework + Core), MSBuild, Visual Studio Build Tools, IIS-tooling, en PowerShell — out of the box.</li>
+      <li><a href="https://docs.github.com/en/actions/hosting-your-own-runners/managing-self-hosted-runners/about-self-hosted-runners">Self-hosted runners</a> draaien op je eigen Windows boxen voor wat niet naar SaaS kan.</li>
+      <li><a href="https://docs.github.com/en/copilot">GitHub Copilot</a> + de <a href="https://learn.microsoft.com/en-us/dotnet/core/porting/upgrade-assistant-overview">.NET Upgrade Assistant</a> zijn expliciet gebouwd om <a href="https://devblogs.microsoft.com/dotnet/upgrade-assistant-now-with-net-9/">.NET Framework → modern .NET</a> migraties te versnellen.</li>
+      <li>De <a href="https://learn.microsoft.com/en-us/visualstudio/version-control/git-with-visual-studio">Visual Studio integratie</a> van GitHub is first-class — dezelfde Microsoft-engineers bouwen het.</li>
+    </ul>
+    <p><strong>Legacy is geen reden meer om te blijven. Het is een argument om over te stappen mét hulp.</strong></p>
   </div>
-</div>
+</section>
 
-<p>Reken een team van 20 engineers, gemiddeld 4u code review per week per dev, NL senior rate. Dat is op jaarbasis enkele tonnen aan review-tijd. CCR vangt een significant deel daarvan op.</p>
+<!-- 03 -->
+<section id="rekensom">
+  <div class="section-label"><span class="num">03</span>Het rekensommetje</div>
+  <h2>"We bouwen het zelf"</h2>
+  <p>Stel je hebt al 2 engineers, 1 maand bezig met één pipeline agent zelf bouwen. Dat is een concreet getal. Hou dat vast.</p>
 
-<div class="callout">
-  <p><strong>Het rekensommetje:</strong> alleen al de tijdwinst en de snellere merge cadence van CCR dekt in veel gevallen de complete GitHub Enterprise + Copilot licentie. Voor de rest van wat je krijgt — agents, security AI, codespaces, autofix, hele pijplijn issue → PR → merge → deploy — betaal je effectief niets extra.</p>
-  <p>En dan ship je nog meer product met dezelfde mensen, op een veiliger platform, terwijl je stopt met zelf infra-tooling bouwen.</p>
-</div>
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="num">€25–35k</div>
+      <div class="label">2 FTE × 1 maand all-in (NL senior dev rates)</div>
+    </div>
+    <div class="stat">
+      <div class="num">1 van ~20</div>
+      <div class="label">capabilities die GitHub native levert — die je dus zou moeten bouwen</div>
+    </div>
+  </div>
 
-<h2 class="section-num" data-num="10">De juiste vraag</h2>
-<div class="callout">
-  <p><strong>Niet:</strong> "Wat is goedkoper, Claude direct of Copilot?"</p>
-  <p><strong>Wel:</strong> "Op welk platform bouwen we de komende 5 jaar — en hoeveel zelf-bouw stoppen we erin om datzelfde platform niveau te halen?"</p>
-</div>
+  <p>Vermenigvuldig dat naar SAST, SCA, secret scanning, AI code review, security autofix, copilot metrics, audit streaming, etc. Snel zit je op een paar honderdduizend euro engineering tijd — alleen al om <em>op niveau te komen</em> van wat een GitHub seat per maand kost.</p>
 
-<div class="cta">
-  <h2 style="margin-top:0">Volgende stap</h2>
-  <p>Als dit verhaal raakt aan iets dat bij jou speelt — een ADO migratie die op pauze staat, een team dat custom agents gaat bouwen, of een AI strategie waar het platform onder ontbreekt — neem dan contact op met je GitHub team.</p>
+  <div class="card warn">
+    <h3>De verborgen kostenposten</h3>
+    <ul>
+      <li><strong>Maintenance forever.</strong> Wat je bouwt, moet je onderhouden. CodeQL queries, Dependabot ecosystem coverage, secret scanning patterns — dat zijn full-time research teams bij GitHub.</li>
+      <li><strong>Opportunity cost.</strong> Die 2 FTE bouwen geen product features.</li>
+      <li><strong>Talent.</strong> Senior devs solliciteren niet om interne CI plumbing te bouwen. Ze willen op een modern platform werken.</li>
+      <li><strong>Je komt nooit op niveau van native AI op security findings</strong> — zie sectie 06.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 04 -->
+<section id="wat-je-mist">
+  <div class="section-label"><span class="num">04</span>Wat je mist op ADO</div>
+  <h2>De capability gap, met directe links</h2>
+  <p>Alles hieronder is GA op GitHub Enterprise Cloud (tenzij anders aangegeven) en niet of beperkt beschikbaar op Azure DevOps. Klik elke capability voor de officiële docs.</p>
+
+  <!-- Security -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon security">⊕</div>
+      <div>
+        <div class="cap-title">Security &amp; Compliance</div>
+        <div class="cap-subtitle">Het grootste gat — niet over te slaan</div>
+      </div>
+    </div>
+    <div class="cap-row-header"><div>Capability</div><div>ADO</div><div>GitHub</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql">CodeQL — native SAST</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/dependabot">Dependabot — SCA + auto-PRs</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-secret-scanning">Secret Scanning (200+ patterns)</a></div><div class="cap-cell cell-partial">Partial</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/secret-scanning/introduction/about-push-protection">Push Protection (block voor commit)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning">Copilot Autofix op SAST findings</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/securing-your-organization/introduction-to-securing-your-organization-at-scale/about-security-campaigns">Security Campaigns (bulk remediation)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/code-security/supply-chain-security/understanding-your-software-supply-chain/exporting-a-software-bill-of-materials-for-your-repository">SBOM export (SPDX)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+  </div>
+
+  <!-- AI -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon ai">◆</div>
+      <div>
+        <div class="cap-title">AI &amp; Agents</div>
+        <div class="cap-subtitle">Waar Microsoft alle nieuwe investering naartoe stuurt</div>
+      </div>
+    </div>
+    <div class="cap-row-header"><div>Capability</div><div>ADO</div><div>GitHub</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/copilot/concepts/agents/coding-agent/about-coding-agent">Copilot coding agent (issue → PR)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/copilot/concepts/agents/anthropic-claude">Anthropic Claude coding agent</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Preview</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review">AI PR review (CCR)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/copilot/using-github-copilot/copilot-spaces/about-organizing-and-sharing-context-with-copilot-spaces">Copilot Spaces (shared context)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/copilot/using-github-copilot/ai-models/changing-the-ai-model-for-copilot-chat">Multi-model picker (Claude, GPT, Gemini)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/copilot/building-copilot-extensions/about-building-copilot-extensions">Copilot Extensions + MCP</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/rest/copilot/copilot-metrics">Copilot Metrics API (ROI tracking)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+  </div>
+
+  <!-- DevEx -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon devex">▶</div>
+      <div>
+        <div class="cap-title">Developer Experience</div>
+        <div class="cap-subtitle">Wat developers daadwerkelijk gebruiken</div>
+      </div>
+    </div>
+    <div class="cap-row-header"><div>Capability</div><div>ADO</div><div>GitHub</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/codespaces/overview">Codespaces (cloud dev env)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://github.com/marketplace?type=actions">Actions Marketplace (20.000+ acties)</a></div><div class="cap-cell cell-partial">~600</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/actions/using-github-hosted-runners/about-larger-runners/about-larger-runners">macOS / large hosted runners</a></div><div class="cap-cell cell-partial">Beperkt</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/get-started/using-github/github-mobile">GitHub Mobile (review + Copilot)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/issues/planning-and-tracking-with-projects/learning-about-projects/about-projects">Projects v2 (custom fields, automations)</a></div><div class="cap-cell cell-partial">Boards</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/discussions">Discussions</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+  </div>
+
+  <!-- Platform -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon platform">◈</div>
+      <div>
+        <div class="cap-title">Platform &amp; Packaging</div>
+        <div class="cap-subtitle">Eén ecosysteem in plaats van vijf losse tools</div>
+      </div>
+    </div>
+    <div class="cap-row-header"><div>Capability</div><div>ADO</div><div>GitHub</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/packages">GitHub Packages (npm, NuGet, Maven, ...)</a></div><div class="cap-cell cell-partial">Artifacts</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry">GHCR (container registry)</a></div><div class="cap-cell cell-partial">ACR apart</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/apps">GitHub Apps (eigen automations)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/pages">Pages (static hosting)</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases">Releases (binaries + notes)</a></div><div class="cap-cell cell-partial">Basic</div><div class="cap-cell cell-yes">Ja</div></div>
+  </div>
+
+  <!-- Governance -->
+  <div class="cap-section">
+    <div class="cap-header">
+      <div class="cap-icon gov">⬢</div>
+      <div>
+        <div class="cap-title">Governance &amp; Enterprise</div>
+        <div class="cap-subtitle">Voor security &amp; compliance teams</div>
+      </div>
+    </div>
+    <div class="cap-row-header"><div>Capability</div><div>ADO</div><div>GitHub</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/streaming-the-audit-log-for-your-enterprise">Audit log streaming (S3 / Splunk / Azure)</a></div><div class="cap-cell cell-partial">Beperkt</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/managing-iam/using-enterprise-managed-users-for-iam/about-enterprise-managed-users">Enterprise Managed Users (EMU)</a></div><div class="cap-cell cell-partial">Via Entra</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-rulesets/about-rulesets">Repository Rulesets</a></div><div class="cap-cell cell-partial">Policies</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens">Fine-grained PATs</a></div><div class="cap-cell cell-no">Nee</div><div class="cap-cell cell-yes">Ja</div></div>
+    <div class="cap-row"><div class="name"><a href="https://docs.github.com/en/organizations/managing-peoples-access-to-your-organization-with-roles/about-custom-organization-roles">Custom roles</a></div><div class="cap-cell cell-partial">Basic</div><div class="cap-cell cell-yes">Ja</div></div>
+  </div>
+</section>
+
+<!-- 05 -->
+<section id="eu">
+  <div class="section-label"><span class="num">05</span>EU compliance</div>
+  <h2>AVG, NIS2, DORA — een apart hoofdstuk</h2>
+  <p>Voor Nederlandse organisaties met AVG, NIS2 of DORA in scope is dit geen optie, het is een eis.</p>
+  <div class="card accent">
+    <ul>
+      <li><a href="https://docs.github.com/en/enterprise-cloud@latest/admin/data-residency/about-github-enterprise-cloud-with-data-residency"><strong>GitHub Enterprise Cloud met Data Residency (GHE.com)</strong></a> — code, metadata en audit logs blijven binnen de EU. Eigen subdomain (<code>*.ghe.com</code>), aparte tenancy, EU regio.</li>
+      <li><a href="https://docs.github.com/en/copilot/responsible-use-of-github-copilot-features"><strong>Copilot Data Residency in EU</strong></a> — prompts en completions verwerkt binnen EU regio.</li>
+      <li><a href="https://github.com/security"><strong>SOC 2 Type II, ISO 27001, FedRAMP Moderate</strong></a> — full compliance stack.</li>
+    </ul>
+    <p>ADO heeft EU hosting, maar geen aparte EU-tenancy variant met dezelfde data residency garanties als GHE.com.</p>
+  </div>
+</section>
+
+<!-- 06 -->
+<section id="gap">
+  <div class="section-label"><span class="num">06</span>Het gat dat niet dicht gaat</h2></div>
+  <h2>De ene gap die je nooit invult</h2>
+  <div class="danger-card">
+    <h3>⚠ Native AI op security findings</h3>
+    <p>Sommige gaps zijn op te lossen met budget en tijd. <strong>Native AI op security findings niet.</strong></p>
+    <p>Dat werkt alleen als je <a href="https://docs.github.com/en/code-security/code-scanning/introduction-to-code-scanning/about-code-scanning-with-codeql">CodeQL (SAST)</a> en <a href="https://docs.github.com/en/code-security/dependabot">Dependabot (SCA)</a> als platform-basis hebt. Daar is <a href="https://docs.github.com/en/code-security/code-scanning/managing-code-scanning-alerts/about-autofix-for-codeql-code-scanning">Copilot Autofix</a> bovenop gebouwd.</p>
+    <p>Zelfs als je security tooling van derde partijen koopt en eraan vast plakt, krijg je nooit dezelfde geïntegreerde flow: <strong>vinding → AI-suggestie → autofix → PR → merge</strong>, binnen één platform met één audit trail.</p>
+  </div>
+</section>
+
+<!-- 07 -->
+<section id="microsoft">
+  <div class="section-label"><span class="num">07</span>Wat Microsoft zelf doet</div>
+  <h2>De signalen die Microsoft afgeeft</h2>
+  <p>Microsoft bezit zowel ADO als GitHub. Kijk naar waar de R&amp;D investering en de roadmap energie heen gaan:</p>
+  <div class="card">
+    <ul>
+      <li>De <a href="https://learn.microsoft.com/en-us/azure/devops/release-notes/">Azure DevOps release notes</a> tonen vooral kleine verbeteringen en bugfixes. Geen nieuwe AI capabilities, geen nieuwe agents.</li>
+      <li>De <a href="https://github.blog/changelog/">GitHub changelog</a> publiceert wekelijks nieuwe features — agents, modellen, security AI, MCP support.</li>
+      <li>Microsoft heeft expliciet een <a href="https://docs.github.com/en/migrations/using-github-enterprise-importer/understanding-github-enterprise-importer/about-github-enterprise-importer">GitHub Enterprise Importer</a> en een <a href="https://docs.github.com/en/actions/migrating-to-github-actions/automated-migrations/migrating-from-azure-devops-with-github-actions-importer">Actions Importer voor ADO Pipelines</a> gebouwd. Een vendor maakt geen migratietools naar zijn andere product tenzij dat de gewenste richting is.</li>
+      <li>De <a href="https://devblogs.microsoft.com/devops/">Azure DevOps blog</a> verwijst zelf regelmatig naar GitHub voor nieuwe AI scenarios.</li>
+      <li>Microsoft engineering teams (Azure, Windows, Office) hosten hun open source op <a href="https://github.com/microsoft">github.com/microsoft</a>, niet op dev.azure.com.</li>
+    </ul>
+    <p>Dit is geen "ADO is dood" verhaal. ADO blijft draaien voor wie er op zit. Maar <strong>nieuwe investering — en zeker AI investering — gaat naar GitHub</strong>.</p>
+  </div>
+</section>
+
+<!-- 08 -->
+<section id="ea">
+  <div class="section-label"><span class="num">08</span>Bonus</div>
+  <h2>Het Microsoft EA voordeel</h2>
+  <div class="card">
+    <p>Voor organisaties met een bestaande Microsoft Enterprise Agreement: <a href="https://docs.github.com/en/billing/managing-billing-for-your-products/about-billing-on-github">GitHub Enterprise en Copilot</a> zijn beschikbaar via dezelfde MS EA.</p>
+    <p>Geen aparte vendor, geen aparte PO flow, gebruik je commit. <strong>Praktisch betekent dit dat procurement een non-issue is.</strong></p>
+  </div>
+</section>
+
+<!-- 09 - CCR -->
+<section id="ccr">
+  <div class="section-label"><span class="num">09</span>De business case begint hier</div>
+  <h2>Eén feature dekt de hele licentie</h2>
+  <p>Je hoeft het hele platform niet eens te activeren om de business case rond te krijgen. Pak één capability: <a href="https://docs.github.com/en/copilot/using-github-copilot/code-review/using-copilot-code-review"><strong>Copilot Code Review (CCR)</strong></a>.</p>
+  <p>CCR reviewt elke PR automatisch vóór een mens er naar kijkt. Style, bugs, security smells, performance — opgevangen voordat het in de review queue ligt.</p>
+
+  <div class="stat-grid">
+    <div class="stat">
+      <div class="num">30–50%</div>
+      <div class="label">minder review-tijd per PR (afhankelijk van team)</div>
+    </div>
+    <div class="stat">
+      <div class="num">↑ velocity</div>
+      <div class="label">meer PRs per week, dezelfde mensen</div>
+    </div>
+  </div>
+
+  <p>Reken een team van 20 engineers × gemiddeld 4u code review per week × NL senior rate. Op jaarbasis enkele tonnen aan review-tijd. CCR vangt een significant deel daarvan op.</p>
+
+  <div class="card accent">
+    <h3>Het volledige plaatje</h3>
+    <p>Alleen al de tijdwinst en de snellere merge cadence van CCR dekt in veel gevallen de complete GitHub Enterprise + Copilot licentie.</p>
+    <p>Voor de rest van wat je krijgt — agents, security AI, codespaces, autofix, hele pijplijn van issue → PR → merge → deploy — betaal je effectief <strong>niets extra</strong>.</p>
+    <p>En dan ship je nog meer product met dezelfde mensen, op een veiliger platform, terwijl je stopt met zelf infra-tooling bouwen.</p>
+  </div>
+
+  <div class="card warn">
+    <h3>Laten we het samen uitrekenen</h3>
+    <p>De getallen hierboven zijn algemeen. De échte business case wordt scherp als we het op jouw team toepassen: aantal engineers, gemiddelde PR-volume, review-tijd, fully-loaded cost per FTE, gemiddelde tijd-tot-merge, productie-incidenten per kwartaal.</p>
+    <p>Een half uur samen en we hebben een onderbouwd cijfer dat je intern kunt verdedigen — inclusief conservatieve en optimistische scenario's. Geen aannames, jullie context.</p>
+  </div>
+</section>
+
+<!-- 09.5 - Record Acceleration -->
+<section id="acceleration">
+  <div class="section-label"><span class="num">10</span>Het platform onder dit alles</div>
+  <h2>De versnelling is geen toeval</h2>
+  <p>Voor wie zich afvraagt of GitHub momentum heeft, of dat dit een ADO-met-andere-naam wordt: kijk naar de cijfers. Dit is wat er over het hele GitHub-platform gebeurt op dit moment.</p>
+
+  <div class="accel-grid">
+    <div class="accel-card">
+      <div class="accel-label">Pull requests merged</div>
+      <div class="accel-num">90M</div>
+      <svg class="accel-spark" viewBox="0 0 240 80" preserveAspectRatio="none">
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#3fb950" stop-opacity="0.4"/><stop offset="100%" stop-color="#3fb950" stop-opacity="0"/></linearGradient></defs>
+        <path d="M0,68 C20,65 30,62 45,55 C60,48 75,52 90,45 C105,38 120,42 135,35 C150,28 165,30 180,22 C195,14 210,12 240,4 L240,80 L0,80 Z" fill="url(#g1)"/>
+        <path d="M0,68 C20,65 30,62 45,55 C60,48 75,52 90,45 C105,38 120,42 135,35 C150,28 165,30 180,22 C195,14 210,12 240,4" stroke="#3fb950" stroke-width="2" fill="none"/>
+        <circle cx="240" cy="4" r="4" fill="#3fb950"/>
+      </svg>
+      <div class="accel-axis"><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+    </div>
+    <div class="accel-card">
+      <div class="accel-label">Commits</div>
+      <div class="accel-num">1.4B</div>
+      <svg class="accel-spark" viewBox="0 0 240 80" preserveAspectRatio="none">
+        <path d="M0,72 C25,70 40,68 60,62 C80,56 95,58 115,50 C135,42 150,44 170,32 C185,22 200,18 220,12 C228,8 234,6 240,4 L240,80 L0,80 Z" fill="url(#g1)"/>
+        <path d="M0,72 C25,70 40,68 60,62 C80,56 95,58 115,50 C135,42 150,44 170,32 C185,22 200,18 220,12 C228,8 234,6 240,4" stroke="#3fb950" stroke-width="2" fill="none"/>
+        <circle cx="240" cy="4" r="4" fill="#3fb950"/>
+      </svg>
+      <div class="accel-axis"><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+    </div>
+    <div class="accel-card">
+      <div class="accel-label">New repos / maand</div>
+      <div class="accel-num">20M</div>
+      <svg class="accel-spark" viewBox="0 0 240 80" preserveAspectRatio="none">
+        <path d="M0,65 C20,62 30,68 45,60 C60,55 70,62 85,55 C100,50 115,55 130,42 C145,32 160,38 175,28 C190,18 205,15 240,4 L240,80 L0,80 Z" fill="url(#g1)"/>
+        <path d="M0,65 C20,62 30,68 45,60 C60,55 70,62 85,55 C100,50 115,55 130,42 C145,32 160,38 175,28 C190,18 205,15 240,4" stroke="#3fb950" stroke-width="2" fill="none"/>
+        <circle cx="240" cy="4" r="4" fill="#3fb950"/>
+      </svg>
+      <div class="accel-axis"><span>2023</span><span>2024</span><span>2025</span><span>2026</span></div>
+    </div>
+  </div>
+  <p style="text-align: center; font-size: 13px; color: var(--muted); margin-top: 8px;">Bron: <a href="https://octoverse.github.com">GitHub Octoverse</a> · platform totalen, niet account-specifiek</p>
+  <p style="margin-top: 24px;">Dit is niet het soort grafiek dat je krijgt bij een product in maintenance mode. Dit is het platform waar de wereld zijn code op zet — en waar AI-features wekelijks op landen.</p>
+</section>
+
+<!-- 10 - juiste vraag -->
+<section>
+  <div class="section-label"><span class="num">10</span>De juiste vraag</div>
+  <h2>Stel jezelf deze vraag</h2>
+  <div class="question-card">
+    <div class="q-row">
+      <div class="q-label bad">✕ Verkeerd</div>
+      <div class="q-text">"Wat is goedkoper, Claude direct of Copilot?"</div>
+    </div>
+    <div class="q-row">
+      <div class="q-label good">✓ Juist</div>
+      <div class="q-text">"Op welk platform bouwen we de komende 5 jaar — en hoeveel zelf-bouw stoppen we erin om datzelfde platform niveau te halen?"</div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-card">
+  <h2>Volgende stap</h2>
+  <p>Als dit verhaal raakt aan iets dat bij jou speelt — een ADO migratie die op pauze staat, een team dat custom agents gaat bouwen, of een AI strategie waar het platform onder ontbreekt — neem contact op met je GitHub team.</p>
   <p>De vraag is niet <em>of</em> je naar GitHub gaat. De vraag is <em>wanneer</em>, en hoeveel je tot dan toe zelf hebt gebouwd dat je daarna weer weggooit.</p>
 </div>
 
@@ -289,8 +826,7 @@
 </div>
 
 <footer>
-  <p>Gemaakt voor engineering leaders die de platformkeuze nog niet definitief gemaakt hebben.<br>
-  Updates: <a href="https://github.blog/changelog/">github.blog/changelog</a> · <a href="https://docs.github.com">docs.github.com</a></p>
+  <p>Updates: <a href="https://github.blog/changelog/">github.blog/changelog</a> · <a href="https://docs.github.com">docs.github.com</a></p>
 </footer>
 
 </div>
